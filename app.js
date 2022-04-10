@@ -1,19 +1,21 @@
 //Libraries
 
-const mysql = require('promise-mysql');
+const { Sequelize, Model, DataTypes } = require('sequelize');
+const sequelize = new Sequelize('mysql://books_users:books123@localhost:3306/books');
 
-const main = async () => {
-  const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'books_users',
-    password: 'books123',
-    database: 'books',
-  });
+class Book extends Model {}
+Book.init(
+  {
+    title: DataTypes.STRING,
+    author: DataTypes.STRING,
+    year: DataTypes.INTEGER,
+    editorial: DataTypes.STRING,
+  },
+  { sequelize, modelName: 'Book', timestamps: false },
+);
 
-  const books = await connection.query('SELECT * FROM books');
-  console.log(books);
-
-  connection.end();
-};
-
-main();
+(async () => {
+  await sequelize.sync();
+  const books = await Book.findAll();
+  books.forEach((book) => console.log(book.toJSON()));
+})();
