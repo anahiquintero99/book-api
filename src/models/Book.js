@@ -1,6 +1,6 @@
-//Libraries
-
+// Libraries
 const { Sequelize, Model, DataTypes } = require('sequelize');
+
 const sequelize = new Sequelize('mysql://books_users:books123@localhost:3306/books');
 
 class Book extends Model {}
